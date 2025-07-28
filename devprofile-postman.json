@@ -1,0 +1,170 @@
+{
+    "info": {
+        "_postman_id": "5eb0e6b2-96df-46ad-9664-735088a8bad2",
+        "name": "devprofile-python",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "http://localhost:8000/api/v1/identity/register",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/identity/register",
+                    "path": [
+                        "api",
+                        "v1",
+                        "identity",
+                        "register"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"cdiazm14@gmail.com\",\n  \"full_name\": \"CARLOS DIAZ\",\n  \"password\": \"12345678\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:8000/api/v1/identity/register",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/auth/access",
+                    "path": [
+                        "api",
+                        "v1",
+                        "auth",
+                        "access"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n  \"email\": \"cdiazm14@gmail.com\",\n  \"password\": \"12345678\"\n}"
+                }
+            }
+        },
+        {
+            "name": "http://localhost:8000/api/v1/identity/1",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/identity/users/1",
+                    "path": [
+                        "api",
+                        "v1",
+                        "identity",
+                        "users",
+                        "1"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJjZGlhem0xNEBnbWFpbC5jb20iLCJleHAiOjE3NTM2NzA5Mjd9.OAw0oQvVSlOZdncwedO3N72ZNVqlQ0xAYDXgf71OW5I",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "http://localhost:8000/api/v1/identity/users/5",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/identity/users/1",
+                    "path": [
+                        "api",
+                        "v1",
+                        "identity",
+                        "users",
+                        "1"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000"
+                },
+                "body": {
+                    "mode": "raw",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    },
+                    "raw": "{\n \"is_active\":true\n}"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJjZGlhem0xNEBnbWFpbC5jb20iLCJleHAiOjE3NTM2NzA5Mjd9.OAw0oQvVSlOZdncwedO3N72ZNVqlQ0xAYDXgf71OW5I",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "http://localhost:8000/api/v1/identity/users/5",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "http://localhost:8000/api/v1/identity/users/1",
+                    "path": [
+                        "api",
+                        "v1",
+                        "identity",
+                        "users",
+                        "1"
+                    ],
+                    "protocol": "http",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "8000"
+                },
+                "auth": {
+                    "type": "bearer",
+                    "bearer": [
+                        {
+                            "key": "token",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJjZGlhem0xNEBnbWFpbC5jb20iLCJleHAiOjE3NTM2NzA5Mjd9.OAw0oQvVSlOZdncwedO3N72ZNVqlQ0xAYDXgf71OW5I",
+                            "type": "string"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

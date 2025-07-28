@@ -1,0 +1,15 @@
+python -m venv venv
+venv\Scripts\activate
+pip install sqlalchemy
+pip install pydantic-settings
+pip install fastapi uvicorn[standard] python-dotenv
+pip install pyodbc
+venv\Scripts\activate; pip install pyodbc
+
+uvicorn app.main:app --reload
+
+pip install pydantic[email]
+
+pip install passlib[bcrypt]
+
+pip install python-jose[cryptography] 
