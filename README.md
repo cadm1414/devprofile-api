@@ -221,7 +221,7 @@ La base de datos se crea automáticamente al iniciar la aplicación. Las tablas 
 
 ## Autor
 
-**[Tu Nombre]**
+**CARLOS ALBERTO DIAZ MINAYA**
 - Email: cdiazm14@gmail.com
 - LinkedIn: www.linkedin.com/in/cdiazm14
 - GitHub: [cadm1414](https://github.com/cadm1414)
