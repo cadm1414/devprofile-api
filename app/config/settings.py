@@ -25,11 +25,12 @@ class Settings(BaseSettings):
         if self.DB_USER and self.DB_PASSWORD:
             password = urllib.parse.quote_plus(self.DB_PASSWORD)            
             user = urllib.parse.quote_plus(self.DB_USER)
+            driver = urllib.parse.quote_plus("ODBC Driver 17 for SQL Server")
                                    
             if os.getenv("FLY_APP_NAME"):
-                return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver=ODBC+Driver+17+for+SQL+Server&Encrypt=no&TrustServerCertificate=yes&Connection+Timeout=30"
+                return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={driver}&Encrypt=no&TrustServerCertificate=yes&Connection+Timeout=30"
             else:                
-                return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={self.DB_DRIVER}&Encrypt=yes&TrustServerCertificate=yes"
+                return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={self.DB_DRIVER}&Encrypt=no&TrustServerCertificate=yes"
         
         return f"mssql+pyodbc://{self.DB_HOST}/{self.DB_NAME}?driver={self.DB_DRIVER}&{self.DB_AUTH}"
     
