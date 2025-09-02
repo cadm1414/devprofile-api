@@ -10,19 +10,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Crear directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias del sistema necesarias para SQL Server
+# Instalar dependencias del sistema para PostgreSQL
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        curl \
-        gnupg \
-        unixodbc-dev \
         gcc \
-        g++ \
-        apt-transport-https \
-    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/debian/11/prod bullseye main" > /etc/apt/sources.list.d/mssql-release.list \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql17 \
+        libpq-dev \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar requirements.txt primero (para aprovechar Docker cache)
