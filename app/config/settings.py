@@ -28,7 +28,7 @@ class Settings(BaseSettings):
                         
             driver = "ODBC+Driver+18+for+SQL+Server" if os.getenv("FLY_APP_NAME") else self.DB_DRIVER
             
-            return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={driver}&Encrypt=yes&TrustServerCertificate=yes"
+            return f"mssql+pyodbc://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}?driver={driver}&Encrypt=no&TrustServerCertificate=yes"
         
         return f"mssql+pyodbc://{self.DB_HOST}/{self.DB_NAME}?driver={self.DB_DRIVER}&{self.DB_AUTH}"
     
