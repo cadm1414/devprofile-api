@@ -1,0 +1,26 @@
+# FastAPI y ASGI server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Base de datos y ORM
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9  # Para PostgreSQL en Render
+pyodbc==5.0.1           # Para SQL Server en desarrollo
+
+# Validación y configuración
+pydantic==2.5.0
+pydantic-settings==2.1.0
+pydantic[email]==2.5.0
+
+# Autenticación y seguridad
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Variables de entorno y utilidades
+python-dotenv==1.0.0
+
+# Dependencias adicionales para producción
+python-multipart==0.0.6
+
+# Para logs y monitoreo (opcional)
+structlog==23.2.0
