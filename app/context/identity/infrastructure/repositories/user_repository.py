@@ -18,10 +18,12 @@ class UserRepository(IUserRepository):
         result = self.db.execute(stmt).scalar_one_or_none()
         return result
 
-    def create_user(self, email: str, full_name: str, password: str) -> User:
+    def create_user(self, email: str, name: str, last_name: str, full_name: str, password: str) -> User:
         hashed_password = pwd_context.hash(password)
         user = User(
             email=email,
+            name=name,
+            last_name=last_name,   
             full_name=full_name,
             hashed_password=hashed_password
         )

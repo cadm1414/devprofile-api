@@ -21,4 +21,4 @@ class AccessUseCase:
                 detail="Usuario inactivo. Contacte al administrador."
             )
         
-        return generate_jwt(user.id, user.email)
+        return generate_jwt(user.id, user.name, user.email)

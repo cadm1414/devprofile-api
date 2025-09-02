@@ -15,9 +15,11 @@ class RegisterUserUseCase:
         try:
             user = self.user_repo.create_user(
                 email=user_data.email,
+                name=user_data.name,
+                last_name=user_data.last_name,
                 full_name=user_data.full_name,
                 password=user_data.password
-            )
+            )            
             return user
         except IntegrityError as e:
             self.db.rollback()
