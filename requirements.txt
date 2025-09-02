@@ -2,10 +2,9 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 
-# Base de datos y ORM
+# Base de datos y ORM - SQL Server
 sqlalchemy==2.0.23
-psycopg2-binary==2.9.9  # Para PostgreSQL en Render
-pyodbc==5.0.1           # Para SQL Server en desarrollo
+pyodbc==5.0.1
 
 # Validación y configuración
 pydantic==2.5.0
@@ -22,5 +21,8 @@ python-dotenv==1.0.0
 # Dependencias adicionales para producción
 python-multipart==0.0.6
 
-# Para logs y monitoreo (opcional)
+# Para logs y monitoreo
 structlog==23.2.0
+
+# Health check
+httpx==0.25.2

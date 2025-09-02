@@ -1,0 +1,36 @@
+# Configuración de Fly.io para DevProfile API
+app = "devprofile-api"
+primary_region = "mia"  # Miami - más cerca de Colombia
+
+[build]
+
+[env]
+  API_PREFIX = "/api/v1"
+  ORIGINS = "*"
+  ALGORITHM = "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES = "60"
+  DB_DRIVER = "ODBC+Driver+18+for+SQL+Server"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[http_service.checks]]
+  interval = "10s"
+  grace_period = "5s"
+  method = "get"
+  path = "/docs"
+  protocol = "http"
+  timeout = "2s"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512  # Más memoria para SQL Server driver
+
+[deploy]
+  release_command = "python -c \"from app.config.database import init_db; init_db()\""
