@@ -1,36 +1,22 @@
-# Configuración de Fly.io para DevProfile API
-app = "devprofile-api"
-primary_region = "mia"  # Miami - más cerca de Colombia
+# fly.toml app configuration file generated for devprofile-api on 2025-09-02T06:37:16Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'devprofile-api'
+primary_region = 'gru'
 
 [build]
 
-[env]
-  API_PREFIX = "/api/v1"
-  ORIGINS = "*"
-  ALGORITHM = "HS256"
-  ACCESS_TOKEN_EXPIRE_MINUTES = "60"
-  DB_DRIVER = "ODBC+Driver+17+for+SQL+Server"
-
 [http_service]
-  internal_port = 8000
+  internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
-
-[[http_service.checks]]
-  interval = "10s"
-  grace_period = "5s"
-  method = "get"
-  path = "/docs"
-  protocol = "http"
-  timeout = "2s"
+  processes = ['app']
 
 [[vm]]
-  cpu_kind = "shared"
+  cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 512  # Más memoria para SQL Server driver
-
-[deploy]
-  release_command = "python -c \"from app.config.database import init_db; init_db()\""
+  memory_mb = 1024
