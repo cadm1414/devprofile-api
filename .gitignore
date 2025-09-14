@@ -169,8 +169,9 @@ test_database.db
 *.bak
 *.backup
 
-# Test files
-test_*.py
-*_test.py
-tests/
-test_repository.py
+- # Test files
+- test_*.py
+- *_test.py
+- tests/
+- test_repository.py
+
