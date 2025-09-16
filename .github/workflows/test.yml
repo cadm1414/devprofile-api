@@ -11,6 +11,15 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+    env:
+      API_PREFIX: "/api/v1"
+      ORIGINS: "*"
+      DB_NAME: "test_db"
+      DB_USER: "test_user"
+      DB_PASSWORD: "test_pass"
+      SECRET_KEY: "secretfortests"
+      ALGORITHM: "HS256"
+      ACCESS_TOKEN_EXPIRE_MINUTES: "30"
     steps:
       - name: Checkout código
         uses: actions/checkout@v3
