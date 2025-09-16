@@ -162,7 +162,7 @@ test_database.db
 # Environment variables
 .env.local
 .env.development
-.env.test
+#.env.test
 .env.production
 
 # Backup files
