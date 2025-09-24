@@ -2,8 +2,7 @@ name: Run Tests Pydantic
 
 on:
   push:
-    branches:
-      - [ main, develop, feature/test-unitarios ]
+    branches: [ main, develop, feature/test-unitarios ]
   pull_request:
 
 jobs:
