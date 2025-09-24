@@ -35,7 +35,10 @@ API REST para la creación y gestión de perfiles profesionales. Permite a los u
 - **Hash de Contraseñas**: Passlib con bcrypt
 - **CORS**: FastAPI CORS Middleware
 - **Testing**: pytest 7.4.0 con pytest-cov 4.1.0
+- **Performance Testing**: Locust 2.17.0
+- **API Testing**: Newman (Postman CLI)
 - **Database Driver**: psycopg2-binary 2.9.7
+- **CI/CD**: GitHub Actions workflows
 - **Deployment**: Docker + Fly.io/Render ready
 
 ## Arquitectura
@@ -200,6 +203,8 @@ tests/                          # Suite de Pruebas Unitarias
 - **Validación:** [Pydantic](https://docs.pydantic.dev/) (modelos y settings)
 - **Cobertura:** [coverage.py](https://coverage.readthedocs.io/)
 - **Performance:** [Locust](https://locust.io/) (carga y stress)
+- **API Testing:** [Newman](https://learning.postman.com/docs/running-collections/using-newman-cli/) (Postman CLI)
+- **CI/CD:** GitHub Actions (automated testing)
 
 #### Ejecución rápida
 ```bash
@@ -256,16 +261,46 @@ locust -f performance/locustfile_identity_test.py --host http://localhost:8000
 ```python
 from locust import HttpUser, task
 class LoginUser(HttpUser):
-   @task
-   def login(self):
-      self.client.post("/api/v1/auth/access", json={"email": "test@test.com", "password": "123"})
+    @task
+    def login(self):
+        self.client.post("/api/v1/auth/access", json={"email": "test@test.com", "password": "123"})
 ```
 
 ---
 
-### 📄 Más detalles y ejemplos en [TESTING_GUIDE.md](TESTING_GUIDE.md)
+### 🔄 Integración Continua (CI/CD)
 
-## Endpoints Principales
+#### GitHub Actions Workflows
+
+**1. Pruebas Unitarias** (`.github/workflows/test.yml`)
+```yaml
+- Ejecuta pytest con cobertura automáticamente
+- Se dispara en push/PR a main, develop, feature/test-unitarios
+- Usa secrets para variables de entorno (.env)
+- Genera reportes de cobertura
+```
+
+**2. Pruebas de API con Newman** (`.github/workflows/newman-test.yml`)  
+```yaml
+- Levanta FastAPI server en background
+- Ejecuta colección Postman con Newman
+- Genera reportes HTML de resultados
+- Valida endpoints y autenticación JWT
+```
+
+#### Comandos de CI/CD locales
+```bash
+# Simular workflow de pytest localmente
+pytest --cov=app --cov-report=term-missing
+
+# Simular workflow de newman localmente
+uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+newman run newman/tests/DEVPROFILE-API.postman_collection.json
+```
+
+---
+
+### 📄 Más detalles y ejemplos en [TESTING_GUIDE.md](TESTING_GUIDE.md)## Endpoints Principales
 
 ### Autenticación
 - `POST /api/v1/auth/access` - Iniciar sesión (devuelve JWT token)
@@ -457,9 +492,13 @@ ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 | PostgreSQL | 9.6+ | Base de datos principal |
 | SQLAlchemy | 2.0.23 | ORM y manejo de BD |
 | Pydantic | 2.5.0 | Validación y serialización |
-| pytest | 7.4.0 | Framework de testing |
+| pytest | 7.4.0 | Framework de testing unitario |
+| pytest-cov | 4.1.0 | Cobertura de código |
+| Locust | 2.17.0 | Pruebas de performance |
+| Newman | latest | Testing de API (Postman CLI) |
 | python-jose | 3.3.0 | Manejo de JWT tokens |
 | psycopg2-binary | 2.9.7 | Driver PostgreSQL |
+| GitHub Actions | - | CI/CD automatizado |
 | bcrypt | - | Hash de contraseñas |
 
 ## Estado del Proyecto
@@ -468,18 +507,19 @@ ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 
 #### ✅ Cambios Importantes (v2.0.0)
 - **Migración completa** de SQL Server a PostgreSQL 9.6+
-- **Suite de pruebas unitarias** implementada con pytest
-- **Cobertura de código** configurada con coverage.py (meta: 80%)
+- **Suite de pruebas unitarias** implementada con pytest + cobertura 80%+
+- **Pruebas de performance** con Locust (login y endpoints de usuario)
+- **Pruebas de API** automatizadas con Newman (Postman CLI)
+- **CI/CD con GitHub Actions** (2 workflows: pytest y newman)
 - **Middleware JWT personalizado** mejorado con manejo de errores
-- **Configuración Pydantic Settings** modernizada
+- **Configuración Pydantic Settings** con validación robusta
 - **Docker y deployment** optimizado para múltiples clouds
-- **Documentación** completamente actualizada
+- **Documentación** completamente actualizada con guías de testing
 
 #### 🔄 En Desarrollo
-- Pruebas E2E completas
-- CI/CD pipeline con GitHub Actions
-- Monitoreo y logging avanzado
-- Autenticación con roles y permisos
+- Pruebas E2E completas con bases de datos de prueba
+- Monitoreo y logging avanzado con observabilidad
+- Autenticación con roles y permisos granulares
 
 #### � Backlog
 - API de perfiles profesionales completa

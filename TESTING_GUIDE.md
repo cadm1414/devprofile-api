@@ -84,21 +84,104 @@ locust -f performance/locustfile_identity_test.py --host http://localhost:8000
 
 ---
 
-## 4. Buenas Prácticas
+## 4. Pruebas de API con Newman (Postman CLI)
 
-- Usa nombres descriptivos para los tests
-- Aísla dependencias externas (mocks/fakes)
-- Mantén las pruebas rápidas (<1s)
-- Usa asserts claros y específicos
-- Documenta casos de prueba complejos
-- Automatiza la ejecución en CI/CD
+### Estructura
+- `newman/tests/DEVPROFILE-API.postman_collection.json` — Colección Postman con endpoints
+
+### Ejecutar pruebas de API
+```bash
+npm install -g newman
+newman run newman/tests/DEVPROFILE-API.postman_collection.json --host http://localhost:8000
+```
+
+### Ejemplo de test en Postman
+```javascript
+// Test en la pestaña "Tests" de Postman
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Response has access_token", function () {
+    const jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property('access_token');
+});
+```
 
 ---
 
-## 5. Recursos
+## 5. Integración Continua con GitHub Actions
+
+### Workflows implementados
+
+#### 🔬 **Pruebas Unitarias** (`.github/workflows/test.yml`)
+```yaml
+# Se ejecuta en push/PR a main, develop, feature/test-unitarios
+# Pasos:
+1. Setup Python 3.11
+2. Instalar dependencias (requirements.txt) 
+3. Crear .env desde secrets de GitHub
+4. Ejecutar pytest con cobertura
+```
+
+#### 🌐 **Pruebas de API** (`.github/workflows/newman-test.yml`)
+```yaml
+# Se ejecuta en push/PR a main, develop
+# Pasos:
+1. Setup Python 3.11 + Node.js 20
+2. Instalar dependencias Python y Newman
+3. Crear .env desde secrets
+4. Levantar FastAPI server en background
+5. Ejecutar tests Newman
+6. Generar reporte HTML
+```
+
+### Configurar secrets en GitHub
+1. Ve a tu repo → Settings → Secrets and variables → Actions
+2. Agrega `ENV_TEST` con el contenido de tu archivo `.env`
+
+### Ejecutar workflows localmente
+```bash
+# Simular workflow de pytest
+pytest --cov=app --cov-report=term-missing
+
+# Simular workflow de newman
+uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+newman run newman/tests/DEVPROFILE-API.postman_collection.json
+```
+
+---
+
+## 6. Configuración de pytest.ini
+
+```ini
+[pytest]
+pythonpath = .
+addopts = --cov=app --cov-report=term-missing
+norecursedirs = performance  # Excluye carpeta de Locust
+```
+
+---
+
+## 7. Buenas Prácticas
+
+- **Testing:** Usa nombres descriptivos para los tests
+- **Isolación:** Aísla dependencias externas (mocks/fakes)  
+- **Performance:** Mantén las pruebas rápidas (<1s)
+- **Assertions:** Usa asserts claros y específicos
+- **Documentación:** Documenta casos de prueba complejos
+- **CI/CD:** Automatiza la ejecución en todos los PRs
+- **Secrets:** No hardcodees credenciales, usa GitHub Secrets
+- **Reports:** Genera reportes HTML para análisis visual
+
+---
+
+## 8. Recursos
 
 - [pytest](https://docs.pytest.org/)
 - [pytest-cov](https://pytest-cov.readthedocs.io/)
 - [coverage.py](https://coverage.readthedocs.io/)
 - [pydantic](https://docs.pydantic.dev/)
 - [locust](https://docs.locust.io/)
+- [newman](https://learning.postman.com/docs/running-collections/using-newman-cli/)
+- [GitHub Actions](https://docs.github.com/en/actions)
