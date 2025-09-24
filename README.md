@@ -192,63 +192,78 @@ tests/                          # Suite de Pruebas Unitarias
 
 ## Testing y Cobertura
 
-### Ejecutar Pruebas Unitarias
+## Testing: Unitarias, Cobertura y Performance
 
+### 🔬 Pruebas Unitarias y de Integración
+
+- **Framework:** [pytest](https://pytest.org/) + [pytest-cov](https://pytest-cov.readthedocs.io/)
+- **Validación:** [Pydantic](https://docs.pydantic.dev/) (modelos y settings)
+- **Cobertura:** [coverage.py](https://coverage.readthedocs.io/)
+- **Performance:** [Locust](https://locust.io/) (carga y stress)
+
+#### Ejecución rápida
 ```bash
-# Ejecutar todas las pruebas
+# Ejecutar todas las pruebas unitarias y de integración
 pytest
 
-# Ejecutar con cobertura
-pytest --cov=app
+# Ejecutar con cobertura de código
+pytest --cov=app --cov-report=term-missing
 
-# Ejecutar con reporte HTML de cobertura
+# Reporte HTML de cobertura
 pytest --cov=app --cov-report=html
+start htmlcov/index.html  # Windows
 
-# Ejecutar solo pruebas unitarias
+# Pruebas unitarias específicas
 pytest tests/unit/ -v
-
-# Ejecutar solo pruebas de integración
+# Pruebas de integración
 pytest tests/integration/ -v
 ```
 
-### Cobertura de Código
+#### Ejemplo de prueba unitaria con Pydantic
+```python
+from app.config.settings import Settings
+def test_settings_database_url():
+   s = Settings(DB_HOST="localhost", DB_PORT=5432, DB_NAME="test", DB_USER="u", DB_PASSWORD="p", API_PREFIX="/api", ORIGINS="*", SECRET_KEY="x", ALGORITHM="HS256", ACCESS_TOKEN_EXPIRE_MINUTES=10)
+   assert s.DATABASE_URL.startswith("postgresql://")
+```
 
-La configuración de pytest incluye cobertura automática:
-- **Meta de cobertura**: 80%
-- **Reporte HTML**: Disponible en `htmlcov/index.html`
-- **Reporte en terminal**: Con líneas faltantes
+#### Métricas de cobertura
+- **Meta:** 80%+ (configurada en pytest.ini)
+- **Reporte HTML:** `htmlcov/index.html`
+- **Servicios de dominio:** 95%+
+- **Configuración:** 90%+
+- **Endpoints públicos:** 100%
 
-### Tipos de Pruebas Implementadas
+---
 
-#### 🔬 Pruebas Unitarias (`tests/unit/`)
+### 🏋️‍♂️ Pruebas de Performance con Locust
 
-**JWT Generator Service** (`test_generator_service.py`)
-- ✅ `test_generate_jwt_with_valid_data`: Generación básica de tokens
-- ✅ `test_jwt_contains_user_id`: Validación de payload correcto
-- ✅ `test_jwt_expiration_time`: Verificación de tiempo de expiración
-- ✅ `test_decode_jwt_valid_token`: Decodificación exitosa
-- ✅ `test_decode_jwt_expired_token`: Manejo de tokens expirados
-- ✅ `test_decode_jwt_invalid_token`: Manejo de tokens inválidos
+**Ubicación:** `performance/locustfile_login_test.py`, `performance/locustfile_identity_test.py`
 
-**Password Service** (`test_password_service.py`)
-- ✅ `test_hash_password_correctly`: Hash de contraseñas
-- ✅ `test_verify_password_correct`: Verificación correcta
-- ✅ `test_verify_password_incorrect`: Verificación fallida
-- ✅ `test_hash_different_passwords_different_hashes`: Unicidad de hashes
+#### Ejecutar pruebas de carga
+```bash
+# Instalar locust si no lo tienes
+pip install locust
 
-#### 🔗 Pruebas de Integración (`tests/integration/`)
+# Ejecutar prueba de login
+locust -f performance/locustfile_login_test.py --host http://localhost:8000
 
-**Swagger/OpenAPI** (`test_swagger.py`)
-- ✅ `test_docs_swagger_ui`: Disponibilidad de Swagger UI
-- ✅ `test_docs_redoc`: Disponibilidad de ReDoc
-- ✅ `test_openapi_schema`: Esquema OpenAPI válido
+# Ejecutar prueba de endpoints de usuario
+locust -f performance/locustfile_identity_test.py --host http://localhost:8000
+```
 
-#### 📊 Métricas de Cobertura Actual
+#### Ejemplo de test Locust
+```python
+from locust import HttpUser, task
+class LoginUser(HttpUser):
+   @task
+   def login(self):
+      self.client.post("/api/v1/auth/access", json={"email": "test@test.com", "password": "123"})
+```
 
-- **Servicios de Dominio**: 95%+ cobertura
-- **Configuración**: 90%+ cobertura  
-- **Endpoints públicos**: 100% cobertura
-- **Meta general**: 80%+ (configurada en pytest.ini)
+---
+
+### 📄 Más detalles y ejemplos en [TESTING_GUIDE.md](TESTING_GUIDE.md)
 
 ## Endpoints Principales
 
