@@ -39,7 +39,7 @@ jobs:
 
       - name: Run Newman tests
         run: |
-          newman run tests/DEVPROFILE-API.postman_collection.json \
+          newman run newman/tests/DEVPROFILE-API.postman_collection.json \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export tests/newman-report.html
 
