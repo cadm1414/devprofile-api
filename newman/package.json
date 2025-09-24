@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "newman": "^6.2.1",
+    "newman-reporter-htmlextra": "^1.23.1"
+  },
+  "scripts": {
+    "test:api": "newman run tests/DEVPROFILE-API.postman_collection.json --reporters cli,json --reporter-json-export tests/newman-report.json",
+    "test:api:html": "newman run tests/DEVPROFILE-API.postman_collection.json --reporters cli,htmlextra --reporter-htmlextra-export tests/newman-report.html"
+  }
+}

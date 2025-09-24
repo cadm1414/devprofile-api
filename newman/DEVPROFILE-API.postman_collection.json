@@ -129,7 +129,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzU4NzE1Nzk4fQ.VVzYiLsNgsIyCRO2HTRNPV4EujNIg_9pUyGC5l4RvO",
+							"value": "{{access_token}}",
 							"type": "string"
 						}
 					]
@@ -151,6 +151,89 @@
 						"v1",
 						"identity",
 						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-one",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"El status debe ser 200 y devolver datos del usuario\", () => {\r",
+							"    if (pm.response.code !== 200) {\r",
+							"        return; \r",
+							"    }\r",
+							"    let data = pm.response.json();\r",
+							"    pm.expect(data).to.have.property(\"id\");\r",
+							"    pm.expect(data).to.have.property(\"email\");\r",
+							"    pm.expect(data).to.have.property(\"full_name\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Usuario no encontrado\", () => {\r",
+							"    if (pm.response.code !== 404) {\r",
+							"        return; \r",
+							"    }\r",
+							"    let data = pm.response.json();\r",
+							"    pm.expect(data.detail).to.eql(\"User not found\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validación de errores de Token\", () => {\r",
+							"    if (pm.response.code !== 401) {\r",
+							"        return;\r",
+							"    }\r",
+							"\r",
+							"    let data = pm.response.json();\r",
+							"\r",
+							"    if (data.detail === \"Token has expired\") {\r",
+							"        pm.expect(data.code).to.eql(\"TOKEN_EXPIRED\");\r",
+							"    }\r",
+							"    else if (data.detail === \"Token missing\") {\r",
+							"        pm.expect(data.detail).to.eql(\"Token missing\");\r",
+							"    }\r",
+							"    else if (data.detail === \"Invalid token\") {\r",
+							"        pm.expect(data.detail).to.eql(\"Invalid token\");\r",
+							"    }\r",
+							"    else {\r",
+							"        pm.expect.fail(`Respuesta inesperada: ${JSON.stringify(data)}`);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/identity/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"identity",
+						"users",
+						"1"
 					]
 				}
 			},
