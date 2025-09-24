@@ -9,7 +9,7 @@ from app.config.settings import settings
 class JWTMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         
-        public_routes = ["/api/v1/auth/access", "/api/v1/identity/register", "/docs", "/openapi.json"]
+        public_routes = ["/api/v1/auth/access", "/api/v1/identity/register", "/docs", "/redoc", "/openapi.json"]
                 
         if request.method == "OPTIONS":
             return await call_next(request)             

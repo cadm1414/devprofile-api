@@ -2,9 +2,10 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 
-# Base de datos y ORM - SQL Server
+# Base de datos y ORM - PostgreSQL 9.6
 sqlalchemy==2.0.23
-pyodbc==5.0.1
+psycopg2-binary==2.9.7  # Compatible con PostgreSQL 9.6
+alembic==1.12.1  # Para migraciones
 
 # Validación y configuración
 pydantic==2.5.0
@@ -17,12 +18,10 @@ passlib[bcrypt]==1.7.4
 
 # Variables de entorno y utilidades
 python-dotenv==1.0.0
-
-# Dependencias adicionales para producción
 python-multipart==0.0.6
-
-# Para logs y monitoreo
 structlog==23.2.0
-
-# Health check
 httpx==0.25.2
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0

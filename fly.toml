@@ -1,4 +1,4 @@
-# Configuración de Fly.io para DevProfile API
+# Configuración de Fly.io para DevProfile API - PostgreSQL
 app = "devprofile-api"
 primary_region = "mia"  # Miami - más cerca de Colombia
 
@@ -9,7 +9,7 @@ primary_region = "mia"  # Miami - más cerca de Colombia
   ORIGINS = "*"
   ALGORITHM = "HS256"
   ACCESS_TOKEN_EXPIRE_MINUTES = "60"
-  DB_DRIVER = "ODBC+Driver+17+for+SQL+Server"
+  # PostgreSQL environment variables will be set via fly secrets
 
 [http_service]
   internal_port = 8000
@@ -30,7 +30,7 @@ primary_region = "mia"  # Miami - más cerca de Colombia
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
-  memory_mb = 512  # Más memoria para SQL Server driver
+  memory_mb = 512  # PostgreSQL requires less memory than SQL Server
 
 [deploy]
   release_command = "python -c \"from app.config.database import init_db; init_db()\""
