@@ -24,17 +24,36 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create .env file from secret
+        run: |
+          echo "${{ secrets.ENV_TEST }}" > .env
+
       - name: Start API
         run: |
-          nohup uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+          nohup uvicorn app.main:app --host 127.0.0.1 --port 8000 > uvicorn.log 2>&1 &
+          sleep 5
       
+      - name: Check API logs
+        run: |
+          echo "=== Uvicorn logs ==="
+          cat uvicorn.log || echo "No log file found"
+          echo "=== Checking if process is running ==="
+          ps aux | grep uvicorn || echo "No uvicorn process found"
+
       - name: Wait for API to be ready
         run: |
-          for i in {1..10}; do
-            nc -z 127.0.0.1 8000 && echo "API up!" && exit 0
-            sleep 2
+          for i in {1..20}; do
+            if nc -z 127.0.0.1 8000; then
+              echo "API is up!"
+              exit 0
+            fi
+            echo "Attempt $i: API not ready, waiting..."
+            sleep 3
           done
-          echo "API did not start in time" && exit 1
+          echo "API did not start in time"
+          echo "=== Final uvicorn logs ==="
+          cat uvicorn.log || echo "No log file found"
+          exit 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
