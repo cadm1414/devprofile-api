@@ -49,19 +49,17 @@ jobs:
             docker load < devprofile-api.tar.gz
             
             # Actualizar .env con variables correctas
-            cat > .env <<EOF
-API_PREFIX=/api/v1
-ORIGINS=*
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=${{ secrets.DB_NAME }}
-DB_USER=${{ secrets.DB_USER }}
-DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-SECRET_KEY=${{ secrets.SECRET_KEY }}
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
-ENVIRONMENT=production
-EOF
+            echo "API_PREFIX=/api/v1" > .env
+            echo "ORIGINS=*" >> .env
+            echo "DB_HOST=localhost" >> .env
+            echo "DB_PORT=5432" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+            echo "ALGORITHM=HS256" >> .env
+            echo "ACCESS_TOKEN_EXPIRE_MINUTES=60" >> .env
+            echo "ENVIRONMENT=production" >> .env
             
             # Detener contenedor anterior
             docker-compose down || true
