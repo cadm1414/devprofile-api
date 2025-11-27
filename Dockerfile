@@ -1,5 +1,5 @@
-# Usar Python 3.11 slim como base
-FROM python:3.11-slim
+# Usar Python 3.11 slim como base (multi-arch compatible)
+FROM --platform=$TARGETPLATFORM python:3.11-slim
 
 # Establecer variables de entorno
 ENV PYTHONDONTWRITEBYTECODE=1 \
