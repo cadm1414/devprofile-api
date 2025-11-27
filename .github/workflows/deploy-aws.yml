@@ -49,7 +49,7 @@ jobs:
             docker load < devprofile-api.tar.gz
             
             # Actualizar .env con variables correctas
-            cat > .env <<'EOF'
+            cat > .env <<EOF
 API_PREFIX=/api/v1
 ORIGINS=*
 DB_HOST=localhost
