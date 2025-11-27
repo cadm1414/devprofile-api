@@ -98,6 +98,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd /home/ubuntu/devprofile-api
+            
             # Verificar salud de la API
             curl -f http://localhost:8000/health || {
               echo "❌ Health check failed"
