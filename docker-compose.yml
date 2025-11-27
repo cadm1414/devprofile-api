@@ -11,23 +11,24 @@ services:
     
     # Variables de entorno
     environment:
+      # API Configuration
+      - API_PREFIX=${API_PREFIX}
+      - ORIGINS=${ORIGINS}
+      
       # Database - Conecta al PostgreSQL del host
-      - DB_HOST=localhost
-      - DB_PORT=5432
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       
       # API Settings
       - SECRET_KEY=${SECRET_KEY}
-      - ALGORITHM=HS256
-      - ACCESS_TOKEN_EXPIRE_MINUTES=60
-      
-      # CORS
-      - ORIGINS=*
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
       
       # Environment
-      - ENVIRONMENT=production
+      - ENVIRONMENT=${ENVIRONMENT}
       - DEBUG=false
       - LOG_LEVEL=info
     
