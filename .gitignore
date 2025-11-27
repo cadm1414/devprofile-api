@@ -160,18 +160,57 @@ test_database.db
 *.ldf
 
 # Environment variables
+.env
+.env.*
+!.env.example
+!.env.deploy.example
 .env.local
 .env.development
-#.env.test
 .env.production
+.env.deploy
 
 # Backup files
 *.bak
 *.backup
 
-- # Test files
-- test_*.py
-- *_test.py
-- tests/
-- test_repository.py
+# AWS/Terraform - Archivos con información sensible
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfstate.backup
+terraform/*.tfvars
+!terraform/terraform.tfvars.example
+terraform/.terraform.lock.hcl
+terraform/crash.log
+terraform/crash.*.log
+terraform/terraform.tfplan
+terraform/.terraform.tfstate.lock.info
+
+# SSH Keys (generadas por Terraform o manualmente)
+*.pem
+*.key
+*.ppk
+id_rsa
+id_rsa.*
+!id_rsa.pub.example
+terraform/devprofile-aws-key.pem
+devprofile-aws-key.pem
+*-key.pem
+*.private.key
+
+# Docker
+*.tar.gz
+docker-compose.override.yml
+
+# Deployment
+devprofile-api.tar.gz
+
+# Archivos de configuración con secrets
+.secrets
+secrets.yml
+secrets.json
+config.local.yml
+
+# Archivos de documentación con info sensible
+GITHUB_SECRETS_SETUP.md
 

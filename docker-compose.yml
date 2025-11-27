@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api:
+    image: devprofile-api:latest
+    container_name: devprofile-api
+    restart: unless-stopped
+    
+    # Network mode host para conectar con PostgreSQL del host
+    network_mode: host
+    
+    # Variables de entorno
+    environment:
+      # Database - Conecta al PostgreSQL del host
+      - DB_HOST=localhost
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      
+      # API Settings
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      
+      # CORS
+      - ORIGINS=*
+      
+      # Environment
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - LOG_LEVEL=info
+    
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Recursos límite (importante para t4g.micro con 1GB RAM)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M

@@ -1,0 +1,130 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+      - production
+  workflow_dispatch:  # Permitir trigger manual
+
+env:
+  DOCKER_IMAGE: devprofile-api:latest
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.DOCKER_IMAGE }} .
+          docker save ${{ env.DOCKER_IMAGE }} | gzip > devprofile-api.tar.gz
+      
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "devprofile-api.tar.gz,docker-compose.yml"
+          target: "/home/ubuntu/devprofile-api"
+      
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/devprofile-api
+            
+            # Cargar imagen Docker
+            docker load < devprofile-api.tar.gz
+            
+            # Actualizar .env con variables correctas
+            cat > .env << EOF
+            # Database credentials
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            
+            # API Settings
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            
+            # Environment
+            ENVIRONMENT=production
+            EOF
+            
+            # Detener contenedor anterior
+            docker-compose down || true
+            
+            # Iniciar nuevo contenedor
+            docker-compose up -d
+            
+            # Esperar a que la API esté lista
+            echo "Esperando a que la API inicie..."
+            for i in {1..30}; do
+              if curl -f http://localhost:8000/health > /dev/null 2>&1; then
+                echo "✅ API is healthy!"
+                break
+              fi
+              echo "Intento $i/30..."
+              sleep 2
+            done
+            
+            # Verificar estado
+            docker-compose ps
+            docker-compose logs --tail=50
+            
+            # Limpiar imagen temporal
+            rm -f devprofile-api.tar.gz
+            
+            # Limpiar imágenes Docker antiguas
+            docker image prune -f
+            
+            echo "✅ Deployment completed successfully!"
+      
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Verificar salud de la API
+            curl -f http://localhost:8000/health || {
+              echo "❌ Health check failed"
+              docker-compose logs --tail=100
+              exit 1
+            }
+            
+            # Verificar endpoints
+            echo "Testing API endpoints..."
+            curl -f http://localhost:8000/docs > /dev/null 2>&1 && echo "✅ Docs endpoint OK"
+            
+            # Mostrar estado de servicios
+            echo "=== Container Status ==="
+            docker-compose ps
+            
+            echo "=== System Resources ==="
+            free -h
+            df -h
+            
+            echo "=== Recent Logs ==="
+            docker-compose logs --tail=20
+      
+      - name: Notify deployment status
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to AWS EC2 completed successfully!"
+          else
+            echo "❌ Deployment failed. Check logs for details."
+          fi

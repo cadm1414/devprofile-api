@@ -1,0 +1,22 @@
+# =============================================================================
+# terraform.tfvars - Configuración AWS
+# =============================================================================
+
+# ⚠️ OBLIGATORIO 1: Password PostgreSQL (mínimo 20 caracteres)
+db_password = "123"  # ⚠️ CAMBIAR
+
+# ⚠️ OBLIGATORIO 2: Secret Key JWT (mínimo 32 caracteres)
+api_secret_key = "123"  # ⚠️ CAMBIAR
+
+# SSH: Deshabilitado por defecto (solo GitHub Actions necesita acceso)
+# Si necesitas SSH, descomenta y pon tu IP:
+# allowed_ssh_cidr = ["TU_IP/32"]
+allowed_ssh_cidr = ["0.0.0.0/0"]  # Abierto para GitHub Actions runner
+
+# =============================================================================
+# Valores por defecto
+# =============================================================================
+aws_region = "us-east-1"
+db_name    = "devprofile_db"
+db_user    = "devprofile_user"
+ami_id     = "ami-0c02fb55b5c460776"

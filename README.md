@@ -467,11 +467,20 @@ ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 
 ## Documentos Adicionales
 
+### 🧪 Testing
 - 📋 [CASOS_PRUEBA_UNITARIOS.md](CASOS_PRUEBA_UNITARIOS.md) - Casos de prueba detallados
 - 🧪 [TESTING_GUIDE.md](TESTING_GUIDE.md) - Guía completa de testing
-- 🐘 [POSTGRESQL_MIGRATION.md](POSTGRESQL_MIGRATION.md) - Detalles de migración de BD
-- 🚀 [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Guía de deployment
 - 📄 [devprofile-postman.json](devprofile-postman.json) - Colección Postman
+
+### 🐘 Base de Datos
+- 🐘 [POSTGRESQL_MIGRATION.md](POSTGRESQL_MIGRATION.md) - Detalles de migración de BD
+
+### ☁️ Deployment en AWS
+- ⭐ **[terraform/README.md](terraform/README.md)** - 🎯 **Guía de deployment con Terraform**
+- 🏗️ [ARCHITECTURE.md](ARCHITECTURE.md) - Diagramas de arquitectura y costos
+- ⚡ [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - Comandos rápidos
+- ✅ [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) - Checklist completo
+- 🔐 [GITHUB_SECRETS.md](GITHUB_SECRETS.md) - Configuración CI/CD
 
 ## Autor
 
@@ -503,17 +512,38 @@ ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 
 ## Estado del Proyecto
 
-### 🎯 Versión Actual: 2.0.0
+### 🎯 Versión Actual: 2.1.0
 
-#### ✅ Cambios Importantes (v2.0.0)
+#### ✅ Cambios Importantes (v2.1.0 - AWS Deployment Ready)
+- **🏗️ Infraestructura como Código (IaC)** con Terraform para AWS
+  - EC2 t4g.micro ARM (Free Tier eligible)
+  - PostgreSQL instalado directamente en EC2 (sin RDS para ahorrar costos)
+  - Docker + Nginx configurados automáticamente
+  - Security Groups, Elastic IP, CloudWatch monitoring
+  - Estimación de costos: ~$5.55/mes (~$33 por 6 meses)
+- **🔄 CI/CD Completo** con GitHub Actions
+  - Workflow de testing (pytest + Newman)
+  - Workflow de deployment automático a AWS EC2
+  - Build y deployment de imagen Docker
+- **📚 Documentación Completa de Deployment**
+  - Guía paso a paso en `terraform/README.md`
+  - Checklist de deployment en `DEPLOYMENT_CHECKLIST.md`
+  - Configuración de GitHub Secrets en `GITHUB_SECRETS.md`
+  - Script de deployment manual `deploy-manual.sh`
+- **🐳 Docker Optimizado**
+  - Multi-stage build para reducir tamaño de imagen
+  - Soporte para arquitecturas ARM64 y AMD64
+  - Healthchecks configurados
+  - Límites de recursos para t4g.micro
+
+#### ✅ Versión Anterior (v2.0.0)
 - **Migración completa** de SQL Server a PostgreSQL 9.6+
 - **Suite de pruebas unitarias** implementada con pytest + cobertura 80%+
 - **Pruebas de performance** con Locust (login y endpoints de usuario)
 - **Pruebas de API** automatizadas con Newman (Postman CLI)
-- **CI/CD con GitHub Actions** (2 workflows: pytest y newman)
+- **CI/CD con GitHub Actions** (workflows de testing)
 - **Middleware JWT personalizado** mejorado con manejo de errores
 - **Configuración Pydantic Settings** con validación robusta
-- **Docker y deployment** optimizado para múltiples clouds
 - **Documentación** completamente actualizada con guías de testing
 
 #### 🔄 En Desarrollo

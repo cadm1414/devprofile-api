@@ -24,6 +24,15 @@ app.add_middleware(
 
 app.add_middleware(JWTMiddleware)
 
+# Health check endpoint para AWS/monitoring
+@app.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "service": "devprofile-api",
+        "version": "1.0.0"
+    }
+
 app.include_router(user_routes.router, prefix=settings.API_PREFIX)
 app.include_router(auth_routes.router, prefix=settings.API_PREFIX)
 
