@@ -50,13 +50,21 @@ jobs:
             
             # Actualizar .env con variables correctas
             cat > .env << EOF
-            # Database credentials
+            # API Configuration
+            API_PREFIX=/api/v1
+            ORIGINS=*
+            
+            # Database Configuration
+            DB_HOST=localhost
+            DB_PORT=5432
             DB_NAME=${{ secrets.DB_NAME }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             
-            # API Settings
+            # JWT Configuration
             SECRET_KEY=${{ secrets.SECRET_KEY }}
+            ALGORITHM=HS256
+            ACCESS_TOKEN_EXPIRE_MINUTES=60
             
             # Environment
             ENVIRONMENT=production
