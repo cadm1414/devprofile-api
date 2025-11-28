@@ -28,6 +28,10 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copiar el código de la aplicación
 COPY . .
 
+# Copiar y dar permisos al script de inicio
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Crear usuario no-root para seguridad
 RUN adduser --disabled-password --gecos '' --shell /bin/bash user \
     && chown -R user:user /app
@@ -36,5 +40,5 @@ USER user
 # Exponer el puerto
 EXPOSE $PORT
 
-# Comando para ejecutar la aplicación
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Comando para ejecutar migraciones y la aplicación
+CMD ["/app/start.sh"]

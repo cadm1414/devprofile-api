@@ -15,6 +15,7 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     password: Optional[str] = None
     is_active: Optional[bool] = None
+    domain: Optional[str] = Field(None, max_length=50, pattern=r'^[a-zA-Z0-9]+$', description="Unique domain for public profile URL (alphanumeric only, no spaces or special characters)")
 
 class PasswordUpdate(BaseModel):
     current_password: str = Field(..., min_length=6, description="Contraseña actual")
@@ -33,6 +34,7 @@ class UserOut(BaseModel):
     name: str
     last_name: str
     full_name: str
+    domain: Optional[str] = None
 
     class Config:
         orm_mode = True

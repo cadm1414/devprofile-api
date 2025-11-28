@@ -11,6 +11,7 @@ class User(Base):
     last_name = Column(String(100), nullable=False)
     full_name = Column(String(255), nullable=False)
     hashed_password = Column(String(100), nullable=False)
+    domain = Column(String(50), unique=True, nullable=True, index=True)  # Domain para perfil público
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

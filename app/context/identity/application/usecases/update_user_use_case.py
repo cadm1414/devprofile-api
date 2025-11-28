@@ -3,6 +3,7 @@ from app.context.identity.domain.models.user_model import User
 from app.context.identity.api.schemas.user_schema import UserUpdate
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 class UpdateUserUseCase:
     def __init__(self, user_repo: IUserRepository, db: Session):
@@ -18,5 +19,25 @@ class UpdateUserUseCase:
             )
                 
         data_to_update = user_data.dict(exclude_unset=True)
-        updated_user = self.user_repo.update(user, data_to_update)
-        return updated_user
+        
+        try:
+            updated_user = self.user_repo.update(user, data_to_update)
+            return updated_user
+        except IntegrityError as e:
+            self.db.rollback()
+            if "ix_users_domain" in str(e.orig) or "domain" in str(e.orig).lower():
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail={
+                        "message": "El dominio ya está en uso.",
+                        "code": "USER_DOMAIN_EXISTS",
+                        "field": "domain"
+                    }
+                )
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={
+                    "message": "Error al actualizar el usuario.",
+                    "code": "USER_UPDATE_FAILED"
+                }
+            )
