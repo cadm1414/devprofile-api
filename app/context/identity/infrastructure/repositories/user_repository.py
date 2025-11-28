@@ -17,6 +17,11 @@ class UserRepository(IUserRepository):
         stmt = select(User).where(User.email == email)
         result = self.db.execute(stmt).scalar_one_or_none()
         return result
+    
+    def get_by_domain(self, domain: str) -> User | None:
+        stmt = select(User).where(User.domain == domain)
+        result = self.db.execute(stmt).scalar_one_or_none()
+        return result
 
     def create_user(self, email: str, name: str, last_name: str, full_name: str, password: str) -> User:
         hashed_password = pwd_context.hash(password)

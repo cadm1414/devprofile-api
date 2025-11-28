@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException,status
 from sqlalchemy.orm import Session
 from app.config.database import get_db
-from app.context.identity.api.schemas.user_schema import UserCreate, UserOut, UserUpdate, PasswordUpdate
+from app.context.identity.api.schemas.user_schema import UserCreate, UserOut, UserUpdate, PasswordUpdate, PublicProfileOut
 from app.context.identity.application.usecases.register_user_use_case import RegisterUserUseCase
 from app.context.identity.application.usecases.get_user_by_id_use_case import GetUserByIdUseCase
 from app.context.identity.application.usecases.update_user_use_case import UpdateUserUseCase
@@ -15,6 +15,22 @@ router = APIRouter(
     prefix="/identity",
     tags=["identity"]
 )
+
+@router.get("/profile/{domain}", response_model=PublicProfileOut, status_code=status.HTTP_200_OK)
+def get_public_profile(domain: str, db: Session = Depends(get_db)):
+    """
+    Ruta pública para obtener perfil de usuario por domain.
+    No requiere autenticación.
+    Retorna solo datos no sensibles: nombre completo, email y domain.
+    """
+    repo = UserRepository(db)
+    user = repo.get_by_domain(domain)
+    if not user or not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Perfil no encontrado"
+        )
+    return user
 
 @router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):

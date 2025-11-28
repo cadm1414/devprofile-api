@@ -39,3 +39,11 @@ class UserOut(BaseModel):
     class Config:
         orm_mode = True
 
+class PublicProfileOut(BaseModel):
+    full_name: str
+    email: EmailStr
+    domain: str
+
+    class Config:
+        orm_mode = True
+

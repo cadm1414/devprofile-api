@@ -10,6 +10,10 @@ class JWTMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         
         public_routes = ["/api/v1/auth/access", "/api/v1/identity/register", "/health", "/docs", "/redoc", "/openapi.json"]
+        
+        # Permitir rutas públicas de perfil
+        if request.url.path.startswith("/api/v1/identity/profile/"):
+            return await call_next(request)
                 
         if request.method == "OPTIONS":
             return await call_next(request)             
